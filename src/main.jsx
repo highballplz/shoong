@@ -7,7 +7,7 @@ import RootLayout from './Layout/RootLayout/RootLayout';
 import Exchange from './pages/Exchange/Exchange';
 import { phocaData } from './loader/index';
 import exchangeDetailData from './loader/exchangeDetailData';
-import MeetUp from './pages/MeetUp/MeetUps';
+import MeetUp from './pages/MeetUp/MeetUp';
 import Profile from './pages/Profile/Profile';
 import Home from './pages/Home/Home';
 import Chatting from './pages/Chatting/Chatting';
@@ -24,6 +24,7 @@ import ProfileSetting from './pages/ProfileSetting/ProfileSetting';
 import LoginInfo from './pages/ProfileSetting/LoginInfo';
 import MyBias from './pages/MyBias/MyBias';
 import NotFound from './pages/NotFound/NotFound';
+import Register from './pages/Register/Register';
 
 const router = createBrowserRouter([
   {
@@ -87,6 +88,11 @@ const router = createBrowserRouter([
       {
         path: '/Login',
         element: <Login />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
+        loader: userData,
       },
     ],
   },
