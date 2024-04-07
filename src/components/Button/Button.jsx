@@ -1,6 +1,6 @@
 // 버튼 컴포넌트
 export default function Button({
-  type,
+  type = 'button',
   isSmall,
   isDisabled,
   bgClassName = '',
