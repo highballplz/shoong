@@ -343,6 +343,9 @@ export default function Register() {
         <Button type="submit" isDisabled={isRegisterButtonDisabled}>
           가입하기
         </Button>
+        <Button type="submit" isDisabled={isRegisterButtonDisabled}>
+          가입하기
+        </Button>
       </form>
     </div>
   );
