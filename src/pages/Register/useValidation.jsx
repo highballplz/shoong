@@ -20,6 +20,8 @@ export default function useValidation(userEmails) {
     email: false,
     pwd: false,
     pwdConfirm: false,
+    // phone: false,
+    birth: false,
   });
 
   const isOnceList = useRef({
@@ -28,7 +30,7 @@ export default function useValidation(userEmails) {
     pwd: false,
     pwdConfirm: false,
     phone: false,
-    birth: false, //안 씀
+    birth: false,
   });
 
   const [isEmailUnique, setIsEmailUnique] = useState(true);
@@ -62,13 +64,48 @@ export default function useValidation(userEmails) {
     } else if (name === 'pwdConfirm') {
       isValidatedList[name] = value === formData.pwd; //value가 pwd와 같은면 isValidatedList.pwdConfrim을 true로 설정.
     }
-
-    // activateRegisterButton();
   };
 
   /* -------------------------------------------------------------------------- */
-  /*                              handleEmailCheck                              */
+  /*                                  setBirth                                  */
   /* -------------------------------------------------------------------------- */
+  const setBirth = (newValue) => {
+    const inputDate = new Date(newValue);
+
+    const year = inputDate.getFullYear().toString();
+    const month = (inputDate.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 to month because getMonth() returns zero-based month index
+    const day = inputDate.getDate().toString().padStart(2, '0');
+    let formattedDate = `${year}${month}${day}`;
+
+    const length = inputDate.toString().length;
+    const hour = inputDate.toString().slice(16, length - 24);
+
+    isOnceList.birth = true;
+
+    // 연원일이 다 비워져있을 때는 fomattedDate가 19700101이기 때문에 formattedDate이 아닌 inputDate로 확인해야 함.
+    if (hour === '09') {
+      //연월일 한 번 채웠다가 비우면 inputDate가 Invalid Date가 아닌 1970년 1월 1일 09:00:00가 돼버림.
+      //다행인 건 연월일에 1970, 01, 01을 입력하면 1970년 1월 1일 00:00:00이 돼서 hour로 구분이 된다는 것.
+      //그래서 hour가 09라는 걸로 연월일이 한 번 채워졌다가 비워졌음을 알 수 있고, 이 사실을 이용해 hour가 '09'이면 formattedDate을 NaNNaNNaN으로 설정.
+      formattedDate = '';
+    }
+
+    // 연월일 중 하나만 비어있을 때는 formattedDate이 'NaNNaNNaN'임.
+    if (
+      formattedDate === 'NaNNaNNaN' ||
+      year < 1900 ||
+      year > new Date().getFullYear()
+    ) {
+      isValidatedList.birth = false;
+    } else {
+      isValidatedList.birth = true;
+    }
+
+    setFormData((formData) => ({
+      ...formData,
+      birth: formattedDate,
+    }));
+  };
 
   return [
     formData,
@@ -76,5 +113,6 @@ export default function useValidation(userEmails) {
     isOnceList,
     isEmailUnique,
     handleInputChange,
+    setBirth,
   ];
 }

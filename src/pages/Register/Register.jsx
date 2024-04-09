@@ -7,6 +7,9 @@ import { useLoaderData, useNavigate } from 'react-router-dom';
 import debounce from '@/utils/debounce';
 import useValidation from './useValidation';
 import useCheckbox from './useCheckbox';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // import express from 'express';
 // import phone from 'phone';
 // import Twilio from './Twilio';
@@ -34,6 +37,7 @@ export default function Register() {
     isOnceList,
     isEmailUnique,
     handleInputChange,
+    setBirth,
   ] = useValidation(userEmails);
 
   const [
@@ -43,6 +47,17 @@ export default function Register() {
     agreeAllButtonStyle,
     handleAgreeAll,
   ] = useCheckbox();
+
+  /* -------------------------------------------------------------------------- */
+  /*                              termsCheckboxList                             */
+  /* -------------------------------------------------------------------------- */
+
+  const termsCheckboxList = [
+    '[필수] 만 14세 이상입니다.',
+    '[필수] 서비스 이용약관 동의 > ',
+    '[필수] 개인정보 처리방침 동의 > ',
+    '[선택] 마케팅 수신 동의',
+  ];
 
   /* -------------------------------------------------------------------------- */
   /*                                   회원가입 버튼                                  */
@@ -98,6 +113,9 @@ export default function Register() {
         onSubmit={handleSubmit}
         className="flex flex-col items-center justify-center gap-6"
       >
+        {/* -------------------------------------------------------------------------- */
+        /*                                    name                                   */
+        /* -------------------------------------------------------------------------- */}
         <div className="name flex flex-col">
           <Input
             name="name"
@@ -112,7 +130,7 @@ export default function Register() {
             mt={16}
           />
 
-          <p //name 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 nameFillMessage 보여주기
+          <p //name 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
             className="mt-1 pl-2 text-xs text-red-500"
             style={{
               display:
@@ -121,7 +139,7 @@ export default function Register() {
           >
             이름을 입력해주세요
           </p>
-          <p //name 인풋 박스 채워졌는데 이름 형식 안 지켰으면 nameValidationMessage 보여주기
+          <p //name 인풋 박스 채워졌는데 이름 형식 안 지켰으면 형식 지키라는 메시지 보여주기
             className="mt-1 pl-2 text-xs text-red-500"
             style={{
               display:
@@ -131,7 +149,9 @@ export default function Register() {
             이름 형식으로 입력해주세요
           </p>
         </div>
-
+        {/* -------------------------------------------------------------------------- */
+        /*                                    email                                   */
+        /* -------------------------------------------------------------------------- */}
         <div className="email flex flex-col">
           <Input
             name="email"
@@ -145,7 +165,7 @@ export default function Register() {
             label="이메일"
           />
 
-          <p //email 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 emailFillMessage 보여주기
+          <p //email 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
             className="mt-1 pl-2 text-xs text-red-500"
             style={{
               display:
@@ -154,7 +174,7 @@ export default function Register() {
           >
             이메일을 입력해주세요
           </p>
-          <p //email 인풋 박스 채워졌는데 이메일 형식 안 지켰으면 emailValidationMessage 보여주기
+          <p //email 인풋 박스 채워졌는데 이메일 형식 안 지켰으면 형식 지키라는 메시지 보여주기
             className="mt-1 pl-2 text-xs text-red-500"
             style={{
               display:
@@ -163,7 +183,7 @@ export default function Register() {
           >
             이메일 형식으로 입력해주세요
           </p>
-          <p //email 이메일 형식 지켜서 잘 입력했는데 이미 가입된 이메일이면 emailValidationMessage 보여주기
+          <p //email 이메일 형식 지켜서 잘 입력했는데 이미 가입된 이메일이면 이미 가입된 메일이라는 메시지 보여주기
             className="mt-1 pl-2 text-xs text-red-500"
             style={{
               display: isValidatedList.email && !isEmailUnique ? '' : 'none',
@@ -176,7 +196,9 @@ export default function Register() {
             인증하기
           </Button>
         </div>
-
+        {/* -------------------------------------------------------------------------- */
+        /*                                    pwd                                     */
+        /* -------------------------------------------------------------------------- */}
         <div className="pwd flex flex-col">
           <Input
             name="pwd"
@@ -190,7 +212,7 @@ export default function Register() {
             label="비밀번호"
           />
 
-          <p //pwd 길이 10자 안 되는데 한 번이라도 입력한 적 있으면 pwdFillMessage 보여주기
+          <p //pwd 길이 10자 안 되는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
             className="mt-1 pl-2 text-xs text-red-500"
             style={{
               display:
@@ -201,7 +223,7 @@ export default function Register() {
           >
             최소 10자 이상 입력해주세요.
           </p>
-          <p //pwd 길이 10자 넘었는데 패스워드 형식 안 지켰으면 pwdValidationMessage 보여주기
+          <p //pwd 길이 10자 넘었는데 패스워드 형식 안 지켰으면 형식 지키라는 메시지 보여주기
             className="mt-1 pl-2 text-xs text-red-500"
             style={{
               display:
@@ -210,6 +232,11 @@ export default function Register() {
           >
             영문/숫자/특수문자(공백 제외)만 허용, 2개 이상 조합
           </p>
+
+          {/* -------------------------------------------------------------------------- */
+          /*                                    pwdConfirm                               */
+          /* -------------------------------------------------------------------------- */}
+
           <Input
             name="pwdConfirm"
             defaultValue={formData.pwdConfirm}
@@ -220,7 +247,7 @@ export default function Register() {
             bgClassName="bg-gray-100"
           />
 
-          <p //pwdConfirm 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 pwdConfirmFillMessage 보여주기
+          <p //pwdConfirm 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
             className="mt-1 pl-2 text-xs text-red-500"
             style={{
               display:
@@ -231,7 +258,7 @@ export default function Register() {
           >
             비밀번호를 한 번 더 입력해주세요.
           </p>
-          <p //pwdConfirm 인풋 박스 채워졌는데 pwd랑 안 똑같으면 pwdConfirmValidationMessage 보여주기
+          <p //pwdConfirm 인풋 박스 채워졌는데 pwd랑 안 똑같으면 동일한 비번 입력하라는 메시지 보여주기
             className="mt-1 pl-2 text-xs text-red-500"
             style={{
               display:
@@ -244,6 +271,9 @@ export default function Register() {
           </p>
         </div>
 
+        {/* -------------------------------------------------------------------------- */
+        /*                                    phone                                   */
+        /* -------------------------------------------------------------------------- */}
         <div className="phone flex flex-col">
           <Input
             name="phone"
@@ -259,7 +289,7 @@ export default function Register() {
             maxLength="11"
           />
 
-          <p //phone 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 phoneFillMessage 보여주기
+          <p //phone 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
             className="mt-1 pl-2 text-xs text-red-500"
             style={{
               display:
@@ -278,18 +308,62 @@ export default function Register() {
           </Button>
         </div>
 
-        <Input
-          name="birth"
-          defaultValue={formData.birth}
-          onChange={debounce(handleInputChange)}
-          type="text"
-          placeholder="생년월일"
-          customClassNames="h-9 mt-1"
-          bgClassName="bg-gray-100"
-          isLabeled
-          label="생년월일"
-        />
+        {/* ---------------------------------- 참고자료 ---------------------------------- */}
+        {/* ---------------------- https://dawonny.tistory.com/403 ------------------- */}
+        {/* ------------ https://mui.com/x/react-date-pickers/date-picker/ ----------- */}
+        {/* ----------- https://mui.com/x/react-date-pickers/custom-field/ ----------- */}
+        {/* ------------- https://mui.com/x/api/date-pickers/date-picker/ ------------ */}
+        <div className="birth flex flex-col gap-1">
+          <div className="text-xs font-semibold text-primary">생년월일</div>
 
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              className="MuiOutlinedInput-notchedOutline MuiInputBase-root"
+              onChange={setBirth}
+              format="YYYY / MM / DD"
+              slotProps={{
+                textField: {
+                  size: 'small',
+                  sx: {
+                    fontSize: '1px',
+                    borderRadius: '0.625rem',
+                    width: '16rem',
+                    height: '2.75rem',
+                    backgroundColor: 'rgb(243 244 246)',
+                    contentEditable: 'false',
+                  },
+                },
+              }}
+              style={{ width: '2000px' }}
+            />
+          </LocalizationProvider>
+
+          <p //birth 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
+            className="mt-1 pl-2 text-xs text-red-500"
+            style={{
+              display:
+                isOnceList.birth === true && formData.birth === ''
+                  ? ''
+                  : 'none',
+            }}
+          >
+            생년월일을 입력해주세요.
+          </p>
+
+          <p //birth 인풋 박스 채워졌는데 형식이 올바르지 않으면 올바르게 입력하라는 메시지 보여주기
+            className="mt-1 pl-2 text-xs text-red-500"
+            style={{
+              display:
+                formData.birth !== '' && !isValidatedList.birth ? '' : 'none',
+            }}
+          >
+            생년월일을 올바르게 입력해주세요.
+          </p>
+        </div>
+
+        {/* -------------------------------------------------------------------------- */
+        /*                                    이용약관 동의                                */
+        /* -------------------------------------------------------------------------- */}
         <div className="agree mb-4 flex w-full flex-col">
           <div className="self-start text-xs font-extrabold text-neutral-700">
             이용 약관 동의
@@ -306,43 +380,18 @@ export default function Register() {
           </Button>
 
           <div className="mt-3 flex flex-col gap-3 px-2">
-            <TermsCheckbox
-              name={checkList[0]}
-              checkedList={checkedList}
-              onChange={handleCheckboxChange}
-            >
-              [필수] 만 14세 이상입니다.
-            </TermsCheckbox>
-
-            <TermsCheckbox
-              name={checkList[1]}
-              checkedList={checkedList}
-              onChange={handleCheckboxChange}
-            >
-              [필수] 서비스 이용약관 동의 {'>'}
-            </TermsCheckbox>
-
-            <TermsCheckbox
-              name={checkList[2]}
-              checkedList={checkedList}
-              onChange={handleCheckboxChange}
-            >
-              [필수] 개인정보 처리방침 동의 {'>'}
-            </TermsCheckbox>
-
-            <TermsCheckbox
-              name={checkList[3]}
-              checkedList={checkedList}
-              onChange={handleCheckboxChange}
-            >
-              [선택] 마케팅 수신 동의
-            </TermsCheckbox>
+            {termsCheckboxList.map((item, index) => (
+              <TermsCheckbox
+                key={index}
+                name={checkList[index]}
+                checkedList={checkedList}
+                onChange={handleCheckboxChange}
+              >
+                {item}
+              </TermsCheckbox>
+            ))}
           </div>
         </div>
-
-        <Button type="submit" isDisabled={isRegisterButtonDisabled}>
-          가입하기
-        </Button>
         <Button type="submit" isDisabled={isRegisterButtonDisabled}>
           가입하기
         </Button>
