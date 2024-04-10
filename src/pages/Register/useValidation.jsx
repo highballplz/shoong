@@ -20,7 +20,7 @@ export default function useValidation(userEmails) {
     email: false,
     pwd: false,
     pwdConfirm: false,
-    // phone: false,
+    phone: false,
     birth: false,
   });
 
@@ -56,13 +56,23 @@ export default function useValidation(userEmails) {
       isValidatedList.name = nameReg(value); //value가 이름 형식이면 isValidatedList.name을 true로 설정.
     } else if (name === 'email') {
       isValidatedList.email = emailReg(value); //value가 이메일 형식이면 isValidatedList.email을 true로 설정.
-      setIsEmailUnique(true);
-      if (userEmails.includes(value)) setIsEmailUnique(false); //formData.email가 아니라 value로 검사해야 함.
+      if (userEmails.includes(value)) {
+        //formData.email가 아니라 value로 검사해야 함.
+        setIsEmailUnique(false);
+      } else {
+        setIsEmailUnique(true);
+      }
     } else if (name === 'pwd') {
       isValidatedList[name] = pwdReg(value); //value가 적합한 패스워드 형식이면 isValidatedList.pwd을 true로 설정.
       isValidatedList.pwdConfirm = value === formData.pwdConfirm; //value가 pwdConfirm과 같은면 isValidatedList.pwdConfrim을 true로 설정.
     } else if (name === 'pwdConfirm') {
       isValidatedList[name] = value === formData.pwd; //value가 pwd와 같은면 isValidatedList.pwdConfrim을 true로 설정.
+    } else if (name === 'phone') {
+      if (value.length < 11) {
+        isValidatedList[name] = false;
+      } else {
+        isValidatedList[name] = true;
+      }
     }
   };
 
@@ -80,9 +90,9 @@ export default function useValidation(userEmails) {
     const length = inputDate.toString().length;
     const hour = inputDate.toString().slice(16, length - 24);
 
-    isOnceList.birth = true;
+    isOnceList.birth = true; //일단 birth 한 번이라도 입력했으면 isOnce 값 true 됨.
 
-    // 연원일이 다 비워져있을 때는 fomattedDate가 19700101이기 때문에 formattedDate이 아닌 inputDate로 확인해야 함.
+    // 연원일이 (한 번 채워졌다가) 다 비워졌을 때는 fomattedDate가 19700101이기 때문에 formattedDate이 아닌 inputDate로 확인해야 함.
     if (hour === '09') {
       //연월일 한 번 채웠다가 비우면 inputDate가 Invalid Date가 아닌 1970년 1월 1일 09:00:00가 돼버림.
       //다행인 건 연월일에 1970, 01, 01을 입력하면 1970년 1월 1일 00:00:00이 돼서 hour로 구분이 된다는 것.
