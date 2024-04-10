@@ -9,7 +9,7 @@ export default function useSubmit(
   checkedList
 ) {
   /* -------------------------------------------------------------------------- */
-  /*                                 회원가입 버튼                                 */
+  /*                  유효성 검사 등을 다 통과해야 회원가입 버튼 활성화                    */
   /* -------------------------------------------------------------------------- */
 
   const [isRegisterButtonDisabled, setIsRegisterButtonDisabled] =
@@ -36,7 +36,7 @@ export default function useSubmit(
   }, [isAllFilled, isAllValidated, isEmailUnique, isRequiredChecked]);
 
   /* -------------------------------------------------------------------------- */
-  /*                                     제출                                     */
+  /*                               handleSubmit                                 */
   /* -------------------------------------------------------------------------- */
 
   const handleSubmit = async (e) => {

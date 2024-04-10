@@ -26,7 +26,7 @@ import useSubmit from './useSubmit';
 
 export default function Register() {
   /* -------------------------------------------------------------------------- */
-  /*                                    변수 선언                                   */
+  /*                                     변수                                    */
   /* -------------------------------------------------------------------------- */
 
   const users = useLoaderData();
@@ -265,6 +265,16 @@ export default function Register() {
             }}
           >
             휴대폰번호를 입력해주세요.
+          </p>
+
+          <p //phone 인풋 박스 채워졌는데 11자리 안 되면 제대로 입력하라는 메시지 보여주기
+            className="mt-1 pl-2 text-xs text-red-500"
+            style={{
+              display:
+                formData.phone !== '' && !isValidatedList.phone ? '' : 'none',
+            }}
+          >
+            휴대폰번호를 올바르게 입력해주세요.
           </p>
 
           <Button
