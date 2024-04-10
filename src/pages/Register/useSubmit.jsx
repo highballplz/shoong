@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
 import pb from '../../api/pocketbase';
-import useCheckbox from './useCheckbox';
-import useValidation from './useValidation';
 
 export default function useSubmit(
   formData,
@@ -12,34 +9,30 @@ export default function useSubmit(
   checkedList
 ) {
   /* -------------------------------------------------------------------------- */
-  /*                                   회원가입 버튼                                  */
+  /*                                 회원가입 버튼                                 */
   /* -------------------------------------------------------------------------- */
 
   const [isRegisterButtonDisabled, setIsRegisterButtonDisabled] =
     useState(true);
 
-  const isAllFilled = Object.values({ ...formData }).reduce(
-    (acc, cur) => acc && cur
-  );
-  const isAllValidated = Object.values({ ...isValidatedList }).reduce(
+  const isAllFilled = Object.values(formData).reduce((acc, cur) => acc && cur);
+  const isAllValidated = Object.values(isValidatedList).reduce(
     (acc, cur) => acc && cur
   );
 
-  const requiredCheckList = [...checkList].slice(0, 3);
+  const requiredCheckList = checkList.slice(0, 3);
   const isRequiredChecked = requiredCheckList.reduce(
     (acc, cur) => acc && checkedList.includes(cur),
     true
   );
 
-  console.log(isValidatedList);
-
+  //setIsRegisterButtonDisabled를 useEffect에 안 넣고 그냥 상태 변경해버리면 무한 루프에 빠짐.
   useEffect(() => {
     if (isAllFilled && isAllValidated && isEmailUnique && isRequiredChecked) {
       setIsRegisterButtonDisabled(false);
     } else {
       setIsRegisterButtonDisabled(true);
     }
-    console.log('++++++++++++++');
   }, [isAllFilled, isAllValidated, isEmailUnique, isRequiredChecked]);
 
   /* -------------------------------------------------------------------------- */
