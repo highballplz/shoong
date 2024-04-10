@@ -1,15 +1,16 @@
-import { useState, useRef } from 'react';
-import Input from '@/components/Input/Input';
 import Button from '@/components/Button/Button';
-import TermsCheckbox from './TermsCheckbox';
-import pb from '../../api/pocketbase';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import Input from '@/components/Input/Input';
 import debounce from '@/utils/debounce';
-import useValidation from './useValidation';
-import useCheckbox from './useCheckbox';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { useEffect, useState } from 'react';
+import { useLoaderData } from 'react-router-dom';
+import pb from '../../api/pocketbase';
+import TermsCheckbox from './TermsCheckbox';
+import useCheckbox from './useCheckbox';
+import useValidation from './useValidation';
+import useSubmit from './useSubmit';
 // import express from 'express';
 // import phone from 'phone';
 // import Twilio from './Twilio';
@@ -25,11 +26,22 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 export default function Register() {
   /* -------------------------------------------------------------------------- */
-  /*                                    커스텀훅                                    */
+  /*                                    변수 선언                                   */
   /* -------------------------------------------------------------------------- */
 
   const users = useLoaderData();
   const userEmails = users.map((user) => user.email);
+
+  const termsCheckboxList = [
+    '[필수] 만 14세 이상입니다.',
+    '[필수] 서비스 이용약관 동의 > ',
+    '[필수] 개인정보 처리방침 동의 > ',
+    '[선택] 마케팅 수신 동의',
+  ];
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    커스텀훅                                    */
+  /* -------------------------------------------------------------------------- */
 
   const [
     formData,
@@ -48,60 +60,13 @@ export default function Register() {
     handleAgreeAll,
   ] = useCheckbox();
 
-  /* -------------------------------------------------------------------------- */
-  /*                              termsCheckboxList                             */
-  /* -------------------------------------------------------------------------- */
-
-  const termsCheckboxList = [
-    '[필수] 만 14세 이상입니다.',
-    '[필수] 서비스 이용약관 동의 > ',
-    '[필수] 개인정보 처리방침 동의 > ',
-    '[선택] 마케팅 수신 동의',
-  ];
-
-  /* -------------------------------------------------------------------------- */
-  /*                                   회원가입 버튼                                  */
-  /* -------------------------------------------------------------------------- */
-
-  const [isRegisterButtonDisabled, setIsRegisterButtonDisabled] =
-    useState(false);
-
-  //회원가입 버튼 활성화
-  function activateRegisterButton() {
-    let filled = false;
-    filled = Object.values(formData).reduce((prev, cur) => !!prev && !!cur);
-
-    filled &&
-    // isEmailCheckButtonDisabled &&
-    agreeAllButtonStyle.bg === 'bg-primary'
-      ? setIsRegisterButtonDisabled(false)
-      : setIsRegisterButtonDisabled(true);
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /*                                     제출                                     */
-  /* -------------------------------------------------------------------------- */
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const data = {
-      email: formData.email,
-      emailVisibility: true,
-      password: formData.pwd,
-      passwordConfirm: formData.pwdConfirm,
-      birth: formData.birth,
-      phoneNumber: formData.phone,
-      name: formData.name,
-      collectBook: ['9mbahw8twzvbrwr'],
-    };
-
-    try {
-      await pb.collection('users').create(data);
-    } catch (error) {
-      alert('입력사항을 다시 확인해주세요.');
-    }
-  };
+  const [isRegisterButtonDisabled, handleSubmit] = useSubmit(
+    formData,
+    isValidatedList,
+    isEmailUnique,
+    checkList,
+    checkedList
+  );
 
   /* -------------------------------------------------------------------------- */
   /*                                     마크업                                    */
@@ -139,6 +104,7 @@ export default function Register() {
           >
             이름을 입력해주세요
           </p>
+
           <p //name 인풋 박스 채워졌는데 이름 형식 안 지켰으면 형식 지키라는 메시지 보여주기
             className="mt-1 pl-2 text-xs text-red-500"
             style={{
@@ -174,6 +140,7 @@ export default function Register() {
           >
             이메일을 입력해주세요
           </p>
+
           <p //email 인풋 박스 채워졌는데 이메일 형식 안 지켰으면 형식 지키라는 메시지 보여주기
             className="mt-1 pl-2 text-xs text-red-500"
             style={{
@@ -183,6 +150,7 @@ export default function Register() {
           >
             이메일 형식으로 입력해주세요
           </p>
+
           <p //email 이메일 형식 지켜서 잘 입력했는데 이미 가입된 이메일이면 이미 가입된 메일이라는 메시지 보여주기
             className="mt-1 pl-2 text-xs text-red-500"
             style={{
