@@ -1,11 +1,15 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
-import { nameReg, emailReg, pwdReg } from './RegularExpressions';
+import { emailReg, nameReg, pwdReg } from './RegularExpressions';
 
-export default function useValidation(userEmails) {
+export default function useValidation() {
   /* -------------------------------------------------------------------------- */
   /*                    formData, isValidatedList, isOnceList                   */
   /* -------------------------------------------------------------------------- */
+
+  const users = useLoaderData();
+  const userEmails = users.map((user) => user.email);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',

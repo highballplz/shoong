@@ -4,13 +4,10 @@ import debounce from '@/utils/debounce';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { useEffect, useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
-import pb from '../../api/pocketbase';
 import TermsCheckbox from './TermsCheckbox';
 import useCheckbox from './useCheckbox';
-import useValidation from './useValidation';
 import useSubmit from './useSubmit';
+import useValidation from './useValidation';
 // import express from 'express';
 // import phone from 'phone';
 // import Twilio from './Twilio';
@@ -28,9 +25,6 @@ export default function Register() {
   /* -------------------------------------------------------------------------- */
   /*                                     변수                                    */
   /* -------------------------------------------------------------------------- */
-
-  const users = useLoaderData();
-  const userEmails = users.map((user) => user.email);
 
   const termsCheckboxList = [
     '[필수] 만 14세 이상입니다.',
@@ -50,7 +44,7 @@ export default function Register() {
     isEmailUnique,
     handleInputChange,
     setBirth,
-  ] = useValidation(userEmails);
+  ] = useValidation();
 
   const [
     checkList,
