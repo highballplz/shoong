@@ -313,7 +313,7 @@ export default function Register() {
                   sx: {
                     fontSize: '1px',
                     borderRadius: '0.625rem',
-                    width: '16rem',
+                    width: '16.56rem',
                     height: '2.75rem',
                     backgroundColor: 'rgb(243 244 246)',
                     contentEditable: 'false',
