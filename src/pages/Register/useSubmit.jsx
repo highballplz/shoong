@@ -83,5 +83,5 @@ export default function useSubmit(
     }
   };
 
-  return [isRegisterButtonDisabled, handleSubmit];
+  return { isRegisterButtonDisabled, handleSubmit };
 }

@@ -121,12 +121,12 @@ export default function useValidation() {
     }));
   };
 
-  return [
+  return {
     formData,
     isValidatedList,
     isOnceList,
     isEmailUnique,
     handleInputChange,
     setBirth,
-  ];
+  };
 }

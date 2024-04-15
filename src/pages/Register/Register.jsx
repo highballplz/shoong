@@ -38,14 +38,14 @@ export default function Register() {
   /*                                    커스텀훅                                    */
   /* -------------------------------------------------------------------------- */
 
-  const [
+  const {
     formData,
     isValidatedList,
     isOnceList,
     isEmailUnique,
     handleInputChange,
     setBirth,
-  ] = useValidation();
+  } = useValidation();
 
   const {
     handleEmailVerification,
@@ -53,15 +53,15 @@ export default function Register() {
     isEmailInputFieldReadOnly,
   } = useVerified(formData.email, isValidatedList.email, isEmailUnique);
 
-  const [
+  const {
     checkList,
     checkedList,
     handleCheckboxChange,
     agreeAllButtonStyle,
     handleAgreeAll,
-  ] = useCheckbox();
+  } = useCheckbox();
 
-  const [isRegisterButtonDisabled, handleSubmit] = useSubmit(
+  const { isRegisterButtonDisabled, handleSubmit } = useSubmit(
     formData,
     isValidatedList,
     isEmailUnique,

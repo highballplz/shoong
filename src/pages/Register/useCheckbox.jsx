@@ -65,11 +65,11 @@ export default function useCheckbox() {
     // activateRegisterButton();
   };
 
-  return [
+  return {
     checkList,
     checkedList,
     handleCheckboxChange,
     agreeAllButtonStyle,
     handleAgreeAll,
-  ];
+  };
 }
