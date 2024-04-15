@@ -285,13 +285,13 @@ export default function Register() {
             휴대폰번호를 올바르게 입력해주세요.
           </p>
 
-          <Button
+          {/* <Button
             type="button"
             isSmall
             customClassNames="self-end mt-2 w-96pxr"
           >
             인증번호 받기
-          </Button>
+          </Button> */}
         </div>
 
         {/* ---------------------------------- 참고자료 ---------------------------------- */}
