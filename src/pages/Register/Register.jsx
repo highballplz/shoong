@@ -360,7 +360,7 @@ export default function Register() {
             onClick={handleAgreeAll}
             bgClassName={agreeAllButtonStyle.bg}
             textColorClassName={agreeAllButtonStyle.text}
-            customClassNames="h-9 mt-1"
+            customClassNames="mt-1"
           >
             네, 모두 동의합니다.
           </Button>
