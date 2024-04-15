@@ -54,7 +54,12 @@ export default function useSubmit(
       password: formData.pwd,
       passwordConfirm: formData.pwdConfirm,
       oldPassword: '7Hx9eL3Pb1NcW4Qa2Rf5', //SDK에는 optional이라 돼있는데 필수였음;;
-      birth: formData.birth,
+      birth:
+        formData.birth.slice(0, 4) +
+        '-' +
+        formData.birth.slice(4, 6) +
+        '-' +
+        formData.birth.slice(6, 8),
       phoneNumber: formData.phone,
       collectBook: ['9mbahw8twzvbrwr'],
     };
