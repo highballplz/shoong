@@ -1,6 +1,6 @@
 .MuiOutlinedInput-notchedOutline{
   border: none !important;
-  padding-top: 0.2rem !important;
+  /* padding-top: 0.2rem !important; */
 }
 
 .MuiInputBase-root{

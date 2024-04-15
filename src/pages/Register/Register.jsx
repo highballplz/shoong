@@ -314,7 +314,7 @@ export default function Register() {
                     fontSize: '1px',
                     borderRadius: '0.625rem',
                     width: '16.56rem',
-                    height: '2.75rem',
+                    height: '2.22rem',
                     backgroundColor: 'rgb(243 244 246)',
                     contentEditable: 'false',
                   },
