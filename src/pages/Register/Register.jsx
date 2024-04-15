@@ -8,6 +8,7 @@ import TermsCheckbox from './TermsCheckbox';
 import useCheckbox from './useCheckbox';
 import useSubmit from './useSubmit';
 import useValidation from './useValidation';
+import useVerified from './useVerified';
 // import express from 'express';
 // import phone from 'phone';
 // import Twilio from './Twilio';
@@ -45,6 +46,12 @@ export default function Register() {
     handleInputChange,
     setBirth,
   ] = useValidation();
+
+  const {
+    handleEmailVerification,
+    isVerificationButtonDisabled,
+    isEmailInputFieldReadOnly,
+  } = useVerified(formData.email, isValidatedList.email, isEmailUnique);
 
   const [
     checkList,
@@ -123,6 +130,7 @@ export default function Register() {
             bgClassName="bg-gray-100"
             isLabeled
             label="이메일"
+            readOnly={isEmailInputFieldReadOnly}
           />
 
           <p //email 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
@@ -154,7 +162,13 @@ export default function Register() {
             이미 가입된 이메일입니다.
           </p>
 
-          <Button type="button" isSmall customClassNames="self-end mt-2">
+          <Button
+            type="button"
+            isSmall
+            customClassNames="self-end mt-2"
+            onClick={handleEmailVerification}
+            isDisabled={isVerificationButtonDisabled}
+          >
             인증하기
           </Button>
         </div>
