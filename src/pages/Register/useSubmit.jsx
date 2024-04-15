@@ -79,7 +79,7 @@ export default function useSubmit(
       if (user.verified) {
         await pb.collection('users').update(user.id, data);
         alert('환엽합니다!');
-        navigate('/');
+        navigate('/Login');
       } else {
         alert('이메일이 인증되지 않았습니다');
       }
