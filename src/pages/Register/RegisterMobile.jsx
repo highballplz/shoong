@@ -74,10 +74,10 @@ export default function Register() {
   /* -------------------------------------------------------------------------- */
 
   return (
-    <div className="flex flex-col items-center justify-center bg-white py-35pxr">
+    <div className="bg-white">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col items-center justify-center gap-6"
+        className="mx-auto my-35pxr flex w-265pxr flex-col  gap-6"
       >
         {/* -------------------------------------------------------------------------- */
         /*                                    name                                   */
