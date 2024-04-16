@@ -74,10 +74,10 @@ export default function Register() {
   /* -------------------------------------------------------------------------- */
 
   return (
-    <div className="bg-white">
+    <div className="bg-white pb-10 pt-24">
       <form
         onSubmit={handleSubmit}
-        className="mx-auto my-35pxr flex w-265pxr flex-col  gap-6"
+        className="mx-auto flex w-265pxr flex-col gap-6"
       >
         {/* -------------------------------------------------------------------------- */
         /*                                    name                                   */
@@ -93,7 +93,6 @@ export default function Register() {
             bgClassName="bg-gray-100"
             isLabeled
             label="이름"
-            mt={16}
           />
 
           <p //name 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
