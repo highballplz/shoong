@@ -93,6 +93,7 @@ export default function Register() {
             bgClassName="bg-gray-100"
             isLabeled
             label="이름"
+            mt={16}
           />
 
           <p //name 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
