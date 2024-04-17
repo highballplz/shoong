@@ -24,17 +24,6 @@ import useVerified from './useVerified';
 
 export default function Register() {
   /* -------------------------------------------------------------------------- */
-  /*                                     변수                                    */
-  /* -------------------------------------------------------------------------- */
-
-  const termsCheckboxList = [
-    '[필수] 만 14세 이상입니다.',
-    '[필수] 서비스 이용약관 동의 > ',
-    '[필수] 개인정보 처리방침 동의 > ',
-    '[선택] 마케팅 수신 동의',
-  ];
-
-  /* -------------------------------------------------------------------------- */
   /*                                    커스텀훅                                    */
   /* -------------------------------------------------------------------------- */
 
@@ -42,6 +31,8 @@ export default function Register() {
     formData,
     isValidatedList,
     isOnceList,
+    isAllFilled,
+    isAllValidated,
     isEmailUnique,
     handleInputChange,
     setBirth,
@@ -54,8 +45,10 @@ export default function Register() {
   } = useVerified(formData.email, isValidatedList.email, isEmailUnique);
 
   const {
+    termsCheckboxList,
     checkList,
     checkedList,
+    isRequiredChecked,
     handleCheckboxChange,
     agreeAllButtonStyle,
     handleAgreeAll,
@@ -63,10 +56,10 @@ export default function Register() {
 
   const { isRegisterButtonDisabled, handleSubmit } = useSubmit(
     formData,
-    isValidatedList,
+    isAllFilled,
+    isAllValidated,
     isEmailUnique,
-    checkList,
-    checkedList
+    isRequiredChecked
   );
 
   /* -------------------------------------------------------------------------- */
