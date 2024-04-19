@@ -11,6 +11,10 @@ export default function useSubmit(
   isRequiredChecked
 ) {
   const navigate = useNavigate();
+  /* -------------------------------------------------------------------------- */
+  /*               Input 컴포넌트에서 엔터키로 submit 되는 것 막기 위한 장치               */
+  /* -------------------------------------------------------------------------- */
+  const [isEnterPressed, setIsEnterPressed] = useState(false);
 
   /* -------------------------------------------------------------------------- */
   /*                  유효성 검사 등을 다 통과해야 회원가입 버튼 활성화                    */
@@ -34,6 +38,11 @@ export default function useSubmit(
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (isEnterPressed) {
+      setIsEnterPressed(false);
+      return;
+    }
 
     const data = {
       name: formData.name,
@@ -72,5 +81,5 @@ export default function useSubmit(
     }
   };
 
-  return { isRegisterButtonDisabled, handleSubmit };
+  return { setIsEnterPressed, isRegisterButtonDisabled, handleSubmit };
 }
