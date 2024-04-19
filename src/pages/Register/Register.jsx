@@ -90,21 +90,13 @@ export default function Register() {
           />
 
           <p //name 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
-            className="mt-1 pl-2 text-xs text-red-500"
-            style={{
-              display:
-                formData.name === '' && isOnceList.current.name ? '' : 'none',
-            }}
+            className={`${formData.name === '' && isOnceList.current.name ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
           >
             이름을 입력해주세요
           </p>
 
           <p //name 인풋 박스 채워졌는데 이름 형식 안 지켰으면 형식 지키라는 메시지 보여주기
-            className="mt-1 pl-2 text-xs text-red-500"
-            style={{
-              display:
-                formData.name !== '' && !isValidatedList.name ? '' : 'none',
-            }}
+            className={`${formData.name !== '' && !isValidatedList.name ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
           >
             이름 형식으로 입력해주세요
           </p>
@@ -127,30 +119,19 @@ export default function Register() {
           />
 
           <p //email 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
-            className="mt-1 pl-2 text-xs text-red-500"
-            style={{
-              display:
-                formData.email === '' && isOnceList.current.email ? '' : 'none',
-            }}
+            className={`${formData.email === '' && isOnceList.current.email ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
           >
             이메일을 입력해주세요
           </p>
 
           <p //email 인풋 박스 채워졌는데 이메일 형식 안 지켰으면 형식 지키라는 메시지 보여주기
-            className="mt-1 pl-2 text-xs text-red-500"
-            style={{
-              display:
-                formData.email !== '' && !isValidatedList.email ? '' : 'none',
-            }}
+            className={`${formData.email !== '' && !isValidatedList.email ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
           >
             이메일 형식으로 입력해주세요
           </p>
 
           <p //email 이메일 형식 지켜서 잘 입력했는데 이미 가입된 이메일이면 이미 가입된 메일이라는 메시지 보여주기
-            className="mt-1 pl-2 text-xs text-red-500"
-            style={{
-              display: isValidatedList.email && !isEmailUnique ? '' : 'none',
-            }}
+            className={`${isValidatedList.email && !isEmailUnique ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
           >
             이미 가입된 이메일입니다.
           </p>
@@ -182,22 +163,12 @@ export default function Register() {
           />
 
           <p //pwd 길이 10자 안 되는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
-            className="mt-1 pl-2 text-xs text-red-500"
-            style={{
-              display:
-                formData.pwd.length < 10 && isOnceList.current.pwd
-                  ? ''
-                  : 'none',
-            }}
+            className={`${formData.pwd.length < 10 && isOnceList.current.pwd ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
           >
             최소 10자 이상 입력해주세요.
           </p>
           <p //pwd 길이 10자 넘었는데 패스워드 형식 안 지켰으면 형식 지키라는 메시지 보여주기
-            className="mt-1 pl-2 text-xs text-red-500"
-            style={{
-              display:
-                formData.pwd.length >= 10 && !isValidatedList.pwd ? '' : 'none',
-            }}
+            className={`${formData.pwd.length >= 10 && !isValidatedList.pwd ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
           >
             영문/숫자/특수문자(공백 제외)만 허용, 2개 이상 조합
           </p>
@@ -217,24 +188,12 @@ export default function Register() {
           />
 
           <p //pwdConfirm 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
-            className="mt-1 pl-2 text-xs text-red-500"
-            style={{
-              display:
-                formData.pwdConfirm === '' && isOnceList.current.pwdConfirm
-                  ? ''
-                  : 'none',
-            }}
+            className={`${formData.pwdConfirm === '' && isOnceList.current.pwdConfirm ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
           >
             비밀번호를 한 번 더 입력해주세요.
           </p>
           <p //pwdConfirm 인풋 박스 채워졌는데 pwd랑 안 똑같으면 동일한 비번 입력하라는 메시지 보여주기
-            className="mt-1 pl-2 text-xs text-red-500"
-            style={{
-              display:
-                formData.pwdConfirm !== '' && !isValidatedList.pwdConfirm
-                  ? ''
-                  : 'none',
-            }}
+            className={`${formData.pwdConfirm !== '' && !isValidatedList.pwdConfirm ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
           >
             동일한 비밀번호를 입력해주세요.
           </p>
@@ -259,21 +218,13 @@ export default function Register() {
           />
 
           <p //phone 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
-            className="mt-1 pl-2 text-xs text-red-500"
-            style={{
-              display:
-                formData.phone === '' && isOnceList.current.phone ? '' : 'none',
-            }}
+            className={`${formData.phone === '' && isOnceList.current.phone ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
           >
             휴대폰번호를 입력해주세요.
           </p>
 
           <p //phone 인풋 박스 채워졌는데 11자리 안 되면 제대로 입력하라는 메시지 보여주기
-            className="mt-1 pl-2 text-xs text-red-500"
-            style={{
-              display:
-                formData.phone !== '' && !isValidatedList.phone ? '' : 'none',
-            }}
+            className={`${formData.phone !== '' && !isValidatedList.phone ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
           >
             휴대폰번호를 올바르게 입력해주세요.
           </p>
@@ -318,23 +269,13 @@ export default function Register() {
           </LocalizationProvider>
 
           <p //birth 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
-            className="mt-1 pl-2 text-xs text-red-500"
-            style={{
-              display:
-                isOnceList.birth === true && formData.birth === ''
-                  ? ''
-                  : 'none',
-            }}
+            className={`${isOnceList.birth === true && formData.birth === '' ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
           >
             생년월일을 입력해주세요.
           </p>
 
           <p //birth 인풋 박스 채워졌는데 형식이 올바르지 않으면 올바르게 입력하라는 메시지 보여주기
-            className="mt-1 pl-2 text-xs text-red-500"
-            style={{
-              display:
-                formData.birth !== '' && !isValidatedList.birth ? '' : 'none',
-            }}
+            className={`${formData.birth !== '' && !isValidatedList.birth ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
           >
             생년월일을 올바르게 입력해주세요.
           </p>
