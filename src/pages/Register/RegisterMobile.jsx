@@ -59,6 +59,7 @@ export default function Register() {
     isAllFilled,
     isAllValidated,
     isEmailUnique,
+    isVerificationButtonDisabled,
     isRequiredChecked
   );
 

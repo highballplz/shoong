@@ -7,6 +7,7 @@ export default function useSubmit(
   isAllFilled,
   isAllValidated,
   isEmailUnique,
+  isVerificationButtonDisabled,
   isRequiredChecked
 ) {
   const navigate = useNavigate();
@@ -49,18 +50,16 @@ export default function useSubmit(
       collectBook: ['9mbahw8twzvbrwr'],
     };
 
-    let user;
-
-    try {
-      user = await pb
-        .collection('users')
-        .getFirstListItem(`email="${formData.email}"`);
-    } catch {
+    if (!isVerificationButtonDisabled) {
       alert('이메일 인증을 진행해주세요');
       return;
     }
 
     try {
+      const user = await pb
+        .collection('users')
+        .getFirstListItem(`email="${formData.email}"`);
+
       if (user.verified) {
         await pb.collection('users').update(user.id, data);
         alert('환엽합니다!');
