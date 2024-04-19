@@ -4,12 +4,12 @@ import debounce from '@/utils/debounce';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { useRef, useState, useEffect } from 'react';
 import TermsCheckbox from './TermsCheckbox';
 import useCheckbox from './useCheckbox';
 import useSubmit from './useSubmit';
 import useValidation from './useValidation';
 import useVerified from './useVerified';
+import usePages from './usePages';
 // import express from 'express';
 // import phone from 'phone';
 // import Twilio from './Twilio';
@@ -24,30 +24,6 @@ import useVerified from './useVerified';
 // }
 
 export default function Register() {
-  /* -------------------------------------------------------------------------- */
-  /*                                     변수                                    */
-  /* -------------------------------------------------------------------------- */
-
-  const registerPages = ['agree', 'email', 'pwd', 'name', 'phone', 'birth'];
-  const totalPageLength = registerPages.length;
-
-  const [currentPageNumber, setCurrentPageNumber] = useState(0);
-
-  const progressBarWidth = `${(265 * (currentPageNumber / (totalPageLength - 1))) / 16}rem`;
-
-  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(
-    registerPages.reduce((acc, cur) => {
-      acc[cur] = true;
-      return acc;
-    }, {})
-  );
-
-  const handleNextButton = (e) =>
-    setCurrentPageNumber((currentPageNumber) => currentPageNumber + 1);
-
-  const handlePreviousButton = (e) =>
-    setCurrentPageNumber((currentPageNumber) => currentPageNumber - 1);
-
   /* -------------------------------------------------------------------------- */
   /*                                    커스텀훅                                    */
   /* -------------------------------------------------------------------------- */
@@ -84,22 +60,24 @@ export default function Register() {
     isAllFilled,
     isAllValidated,
     isEmailUnique,
+    isVerificationButtonDisabled,
     isRequiredChecked
   );
 
-  useEffect(() => {
-    if (isRequiredChecked) {
-      setIsNextButtonDisabled((isNextButtonDisabled) => ({
-        ...isNextButtonDisabled,
-        ['agree']: false,
-      }));
-    } else {
-      setIsNextButtonDisabled((isNextButtonDisabled) => ({
-        ...isNextButtonDisabled,
-        ['agree']: true,
-      }));
-    }
-  }, [isRequiredChecked]);
+  const {
+    progressBarWidth,
+    registerPages,
+    currentPageNumber,
+    isNextButtonDisabled,
+    handleNextButton,
+    handlePreviousButton,
+  } = usePages(
+    formData,
+    isValidatedList,
+    isEmailUnique,
+    isVerificationButtonDisabled,
+    isRequiredChecked
+  );
 
   /* -------------------------------------------------------------------------- */
   /*                                     마크업                                    */
@@ -107,7 +85,7 @@ export default function Register() {
 
   return (
     <div className="relative h-600pxr bg-white">
-      <div className="absolute left-[50%] top-[50%] h-400pxr w-275pxr translate-x-[-50%] translate-y-[-50%] p-5pxr">
+      <div className="absolute left-[50%] top-[50%] h-400pxr w-275pxr translate-x-[-50%] translate-y-[-50%] overflow-hidden p-5pxr">
         <div className="mb-25pxr text-center text-3xl font-b04 text-primary">
           회원가입
         </div>
@@ -186,35 +164,19 @@ export default function Register() {
               />
 
               <p //email 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
-                className="mt-1 pl-2 text-xs text-red-500"
-                style={{
-                  display:
-                    formData.email === '' && isOnceList.current.email
-                      ? ''
-                      : 'none',
-                }}
+                className={`${formData.email === '' && isOnceList.current.email ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
               >
                 이메일을 입력해주세요
               </p>
 
               <p //email 인풋 박스 채워졌는데 이메일 형식 안 지켰으면 형식 지키라는 메시지 보여주기
-                className="mt-1 pl-2 text-xs text-red-500"
-                style={{
-                  display:
-                    formData.email !== '' && !isValidatedList.email
-                      ? ''
-                      : 'none',
-                }}
+                className={`${formData.email !== '' && !isValidatedList.email ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
               >
                 이메일 형식으로 입력해주세요
               </p>
 
               <p //email 이메일 형식 지켜서 잘 입력했는데 이미 가입된 이메일이면 이미 가입된 메일이라는 메시지 보여주기
-                className="mt-1 pl-2 text-xs text-red-500"
-                style={{
-                  display:
-                    isValidatedList.email && !isEmailUnique ? '' : 'none',
-                }}
+                className={`${isValidatedList.email && !isEmailUnique ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
               >
                 이미 가입된 이메일입니다.
               </p>
@@ -232,7 +194,7 @@ export default function Register() {
               <div className="flex justify-between">
                 <Button
                   type="button"
-                  customClassNames="mt-4 w-130pxr"
+                  customClassNames="mt-4 w-99pxr"
                   onClick={handlePreviousButton}
                 >
                   이전
@@ -240,7 +202,7 @@ export default function Register() {
                 <Button
                   type="button"
                   isDisabled={isNextButtonDisabled['email']}
-                  customClassNames="mt-4 w-130pxr"
+                  customClassNames="mt-4 w-99pxr"
                   onClick={handleNextButton}
                 >
                   다음
@@ -266,24 +228,12 @@ export default function Register() {
               />
 
               <p //pwd 길이 10자 안 되는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
-                className="mt-1 pl-2 text-xs text-red-500"
-                style={{
-                  display:
-                    formData.pwd.length < 10 && isOnceList.current.pwd
-                      ? ''
-                      : 'none',
-                }}
+                className={`${formData.pwd.length < 10 && isOnceList.current.pwd ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
               >
                 최소 10자 이상 입력해주세요.
               </p>
               <p //pwd 길이 10자 넘었는데 패스워드 형식 안 지켰으면 형식 지키라는 메시지 보여주기
-                className="mt-1 pl-2 text-xs text-red-500"
-                style={{
-                  display:
-                    formData.pwd.length >= 10 && !isValidatedList.pwd
-                      ? ''
-                      : 'none',
-                }}
+                className={`${formData.pwd.length >= 10 && !isValidatedList.pwd ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
               >
                 영문/숫자/특수문자(공백 제외)만 허용, 2개 이상 조합
               </p>
@@ -303,24 +253,12 @@ export default function Register() {
               />
 
               <p //pwdConfirm 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
-                className="mt-1 pl-2 text-xs text-red-500"
-                style={{
-                  display:
-                    formData.pwdConfirm === '' && isOnceList.current.pwdConfirm
-                      ? ''
-                      : 'none',
-                }}
+                className={`${formData.pwdConfirm === '' && isOnceList.current.pwdConfirm ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
               >
                 비밀번호를 한 번 더 입력해주세요.
               </p>
               <p //pwdConfirm 인풋 박스 채워졌는데 pwd랑 안 똑같으면 동일한 비번 입력하라는 메시지 보여주기
-                className="mt-1 pl-2 text-xs text-red-500"
-                style={{
-                  display:
-                    formData.pwdConfirm !== '' && !isValidatedList.pwdConfirm
-                      ? ''
-                      : 'none',
-                }}
+                className={`${formData.pwdConfirm !== '' && !isValidatedList.pwdConfirm ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
               >
                 동일한 비밀번호를 입력해주세요.
               </p>
@@ -328,7 +266,7 @@ export default function Register() {
               <div className="flex justify-between">
                 <Button
                   type="button"
-                  customClassNames="mt-4 w-130pxr"
+                  customClassNames="mt-4 w-99pxr"
                   onClick={handlePreviousButton}
                 >
                   이전
@@ -336,7 +274,7 @@ export default function Register() {
                 <Button
                   type="button"
                   isDisabled={isNextButtonDisabled['pwd']}
-                  customClassNames="mt-4 w-130pxr"
+                  customClassNames="mt-4 w-99pxr"
                   onClick={handleNextButton}
                 >
                   다음
@@ -362,23 +300,13 @@ export default function Register() {
               />
 
               <p //name 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
-                className="mt-1 pl-2 text-xs text-red-500"
-                style={{
-                  display:
-                    formData.name === '' && isOnceList.current.name
-                      ? ''
-                      : 'none',
-                }}
+                className={`${formData.name === '' && isOnceList.current.name ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
               >
                 이름을 입력해주세요
               </p>
 
               <p //name 인풋 박스 채워졌는데 이름 형식 안 지켰으면 형식 지키라는 메시지 보여주기
-                className="mt-1 pl-2 text-xs text-red-500"
-                style={{
-                  display:
-                    formData.name !== '' && !isValidatedList.name ? '' : 'none',
-                }}
+                className={`${formData.name !== '' && !isValidatedList.name ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
               >
                 이름 형식으로 입력해주세요
               </p>
@@ -386,7 +314,7 @@ export default function Register() {
               <div className="flex justify-between">
                 <Button
                   type="button"
-                  customClassNames="mt-4 w-130pxr"
+                  customClassNames="mt-4 w-99pxr"
                   onClick={handlePreviousButton}
                 >
                   이전
@@ -394,7 +322,7 @@ export default function Register() {
                 <Button
                   type="button"
                   isDisabled={isNextButtonDisabled['name']}
-                  customClassNames="mt-4 w-130pxr"
+                  customClassNames="mt-4 w-99pxr"
                   onClick={handleNextButton}
                 >
                   다음
@@ -422,25 +350,13 @@ export default function Register() {
               />
 
               <p //phone 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
-                className="mt-1 pl-2 text-xs text-red-500"
-                style={{
-                  display:
-                    formData.phone === '' && isOnceList.current.phone
-                      ? ''
-                      : 'none',
-                }}
+                className={`${formData.phone === '' && isOnceList.current.phone ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
               >
                 휴대폰번호를 입력해주세요.
               </p>
 
               <p //phone 인풋 박스 채워졌는데 11자리 안 되면 제대로 입력하라는 메시지 보여주기
-                className="mt-1 pl-2 text-xs text-red-500"
-                style={{
-                  display:
-                    formData.phone !== '' && !isValidatedList.phone
-                      ? ''
-                      : 'none',
-                }}
+                className={`${formData.phone !== '' && !isValidatedList.phone ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
               >
                 휴대폰번호를 올바르게 입력해주세요.
               </p>
@@ -456,7 +372,7 @@ export default function Register() {
               <div className="flex justify-between">
                 <Button
                   type="button"
-                  customClassNames="mt-4 w-130pxr"
+                  customClassNames="mt-4 w-99pxr"
                   onClick={handlePreviousButton}
                 >
                   이전
@@ -464,7 +380,7 @@ export default function Register() {
                 <Button
                   type="button"
                   isDisabled={isNextButtonDisabled['phone']}
-                  customClassNames="mt-4 w-130pxr"
+                  customClassNames="mt-4 w-99pxr"
                   onClick={handleNextButton}
                 >
                   다음
@@ -504,37 +420,33 @@ export default function Register() {
               </LocalizationProvider>
 
               <p //birth 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
-                className="mt-1 pl-2 text-xs text-red-500"
-                style={{
-                  display:
-                    isOnceList.birth === true && formData.birth === ''
-                      ? ''
-                      : 'none',
-                }}
+                className={`${isOnceList.birth === true && formData.birth === '' ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
               >
                 생년월일을 입력해주세요.
               </p>
 
               <p //birth 인풋 박스 채워졌는데 형식이 올바르지 않으면 올바르게 입력하라는 메시지 보여주기
-                className="mt-1 pl-2 text-xs text-red-500"
-                style={{
-                  display:
-                    formData.birth !== '' && !isValidatedList.birth
-                      ? ''
-                      : 'none',
-                }}
+                className={`${formData.birth !== '' && !isValidatedList.birth ? '' : 'hidden'} mt-1 pl-2 text-xs text-red-500`}
               >
                 생년월일을 올바르게 입력해주세요.
               </p>
 
-              <Button
-                type="submit"
-                isDisabled={isRegisterButtonDisabled}
-                customClassNames="mt-4"
-                onClick={handleNextButton}
-              >
-                가입하기
-              </Button>
+              <div className="flex justify-between">
+                <Button
+                  type="button"
+                  customClassNames="mt-4 w-99pxr"
+                  onClick={handlePreviousButton}
+                >
+                  이전
+                </Button>
+                <Button
+                  type="submit"
+                  isDisabled={isRegisterButtonDisabled}
+                  customClassNames="mt-4 w-99pxr"
+                >
+                  가입하기
+                </Button>
+              </div>
             </div>
           )}
         </form>
