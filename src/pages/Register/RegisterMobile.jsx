@@ -107,7 +107,7 @@ export default function Register() {
 
   return (
     <div className="relative h-600pxr bg-white">
-      <div className="absolute left-[50%] top-[50%] w-275pxr translate-x-[-50%] translate-y-[-50%]  p-5pxr">
+      <div className="absolute left-[50%] top-[50%] h-400pxr w-275pxr translate-x-[-50%] translate-y-[-50%] p-5pxr">
         <div className="mb-25pxr text-center text-3xl font-b04 text-primary">
           회원가입
         </div>
