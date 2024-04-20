@@ -54,14 +54,15 @@ export default function Register() {
     handleAgreeAll,
   } = useCheckbox();
 
-  const { isRegisterButtonDisabled, handleSubmit } = useSubmit(
-    formData,
-    isAllFilled,
-    isAllValidated,
-    isEmailUnique,
-    isVerificationButtonDisabled,
-    isRequiredChecked
-  );
+  const { setIsEnterPressed, isRegisterButtonDisabled, handleSubmit } =
+    useSubmit(
+      formData,
+      isAllFilled,
+      isAllValidated,
+      isEmailUnique,
+      isVerificationButtonDisabled,
+      isRequiredChecked
+    );
 
   /* -------------------------------------------------------------------------- */
   /*                                     마크업                                    */
@@ -87,6 +88,9 @@ export default function Register() {
             bgClassName="bg-gray-100"
             isLabeled
             label="이름"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') setIsEnterPressed(true);
+            }} //엔터키로 submit되는 거 막기 위해 isEnterPressed로 관리
           />
 
           <p //name 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
@@ -116,6 +120,9 @@ export default function Register() {
             isLabeled
             label="이메일"
             readOnly={isEmailInputFieldReadOnly}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') setIsEnterPressed(true);
+            }} //엔터키로 submit되는 거 막기 위해 isEnterPressed로 관리
           />
 
           <p //email 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
@@ -160,6 +167,9 @@ export default function Register() {
             bgClassName="bg-gray-100"
             isLabeled
             label="비밀번호"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') setIsEnterPressed(true);
+            }} //엔터키로 submit되는 거 막기 위해 isEnterPressed로 관리
           />
 
           <p //pwd 길이 10자 안 되는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
@@ -185,6 +195,9 @@ export default function Register() {
             placeholder="비밀번호 재확인"
             customClassNames="h-9 mt-2"
             bgClassName="bg-gray-100"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') setIsEnterPressed(true);
+            }} //엔터키로 submit되는 거 막기 위해 isEnterPressed로 관리
           />
 
           <p //pwdConfirm 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
@@ -215,6 +228,9 @@ export default function Register() {
             isLabeled
             label="휴대폰 번호"
             maxLength="11"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') setIsEnterPressed(true);
+            }} //엔터키로 submit되는 거 막기 위해 isEnterPressed로 관리
           />
 
           <p //phone 인풋 박스 비워져있는데 한 번이라도 입력한 적 있으면 입력하라는 메시지 보여주기
