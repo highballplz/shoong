@@ -45,7 +45,7 @@ export default function mergeTailwindClassNames(...classNames) {
   //   'justify-between',
   // ];
 
-  const mergedClassName = mergedClassNames.join(' ');
+  const mergedClassName = mergedClassNames.join(' ').trim();
   // mergedClassName = 'w-1 h-2 text-black flex flex-row justify-between';
 
   return mergedClassName;
@@ -110,8 +110,8 @@ function findTextColorIndex(classNames) {
 }
 
 function isTextColor(className) {
-  const [property, value1, value2] = className.split('-');
-  return property === 'text' && colors.includes(value1); //text로 시작하는 다른 프로퍼티(textAlign, textWrap)가 있기 때문에 value가 color인지도 체크를 해줘야 됨.
+  const [property, value] = className.split('-');
+  return property === 'text' && colors.includes(value); //text로 시작하는 다른 프로퍼티(textAlign, textWrap)가 있기 때문에 value가 color인지도 체크를 해줘야 됨.
 }
 
 /* -------------------------------------------------------------------------- */
