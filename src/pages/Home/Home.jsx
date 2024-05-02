@@ -3,13 +3,12 @@ import VerticalCarousel from '@/components/Carousel/VerticalCarousel';
 import FloatingButton from '@/components/FloatingButton/FloatingButton';
 import ImageLink from '@/components/ImageLink/ImageLink';
 import MainCardContainer from '@/components/MainCardContainer/MainCardContainer';
-import { useLoaderData } from 'react-router';
+import { isLogin } from '@/store/store';
 import PhocaContainer from '../../components/PhocaContainer/PhocaContainer';
 import {
   usePhocaDataByCreated,
   usePhocaDataByLikeCount,
 } from '../../loader/usePhocaData';
-import { isLogin } from '@/store/store';
 
 export default function Home() {
   const { init } = isLogin();
@@ -17,10 +16,11 @@ export default function Home() {
   const phocaDataByLikeCount = usePhocaDataByLikeCount();
 
   return (
-    <div className="mt-55pxr flex flex-col">
+    <div className="mt-55pxr min-w-0 desktop:mt-0 desktop:bg-white">
       <FloatingButton isAuth={init} />
       <Carousel />
       <VerticalCarousel />
+
       <MainCardContainer
         title="최신 업데이트 포카"
         subTitle="두근두근 오늘의 신상 포카는...!"

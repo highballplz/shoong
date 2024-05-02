@@ -12,13 +12,17 @@ const pxToRemFunc = (start, end) =>
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
-    screen: {
+    containers: {
+      desktop: '1080px',
+    },
+    screens: {
       desktop: '1080px',
     },
     extend: {
       spacing: {
         ...pxToRemFunc(0, 1000),
         'screen-nav': 'calc(100vh - 120px)',
+        'screen-meetUp': 'calc(100vh - 55px)',
       }, // px을 rem으로 변환
       inset: {
         ...pxToRemFunc(0, 1000),
@@ -93,5 +97,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/container-queries')],
 };
