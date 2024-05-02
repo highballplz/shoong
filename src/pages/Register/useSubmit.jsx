@@ -11,6 +11,14 @@ export default function useSubmit(
   isRequiredChecked
 ) {
   const navigate = useNavigate();
+
+  /* -------------------------------------------------------------------------- */
+  /*              '가입하기' 버튼 누르면 뜨는 모달창 컨트롤하기 위한 변수들                   */
+  /* -------------------------------------------------------------------------- */
+  const [isSubmitModalOpened, setIsSubmitModalOpened] = useState(false);
+
+  const [submitModalMesseage, setSubmitModalMesseage] = useState('');
+
   /* -------------------------------------------------------------------------- */
   /*               Input 컴포넌트에서 엔터키로 submit 되는 것 막기 위한 장치               */
   /* -------------------------------------------------------------------------- */
@@ -19,7 +27,6 @@ export default function useSubmit(
   /* -------------------------------------------------------------------------- */
   /*                  유효성 검사 등을 다 통과해야 회원가입 버튼 활성화                    */
   /* -------------------------------------------------------------------------- */
-
   const [isRegisterButtonDisabled, setIsRegisterButtonDisabled] =
     useState(true);
 
@@ -60,7 +67,8 @@ export default function useSubmit(
     };
 
     if (!isVerificationButtonDisabled) {
-      alert('이메일 인증을 진행해주세요');
+      setSubmitModalMesseage('이메일 인증을 진행해주세요');
+      setIsSubmitModalOpened(true);
       return;
     }
 
@@ -71,15 +79,27 @@ export default function useSubmit(
 
       if (user.verified) {
         await pb.collection('users').update(user.id, data);
-        alert('환엽합니다!');
+        setSubmitModalMesseage('환영합니다!');
+        setIsSubmitModalOpened(true);
         navigate('/Login');
       } else {
-        alert('이메일이 인증되지 않았습니다');
+        setSubmitModalMesseage('이메일이 인증되지 않았습니다');
+        setIsSubmitModalOpened(true);
       }
     } catch (error) {
-      alert('통신 에러');
+      setSubmitModalMesseage(
+        `\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0통신 에러입니다.\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0`
+      );
+      setIsSubmitModalOpened(true);
     }
   };
 
-  return { setIsEnterPressed, isRegisterButtonDisabled, handleSubmit };
+  return {
+    submitModalMesseage,
+    isSubmitModalOpened,
+    setIsSubmitModalOpened,
+    setIsEnterPressed,
+    isRegisterButtonDisabled,
+    handleSubmit,
+  };
 }

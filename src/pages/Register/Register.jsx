@@ -9,6 +9,7 @@ import useCheckbox from './useCheckbox';
 import useSubmit from './useSubmit';
 import useValidation from './useValidation';
 import useVerified from './useVerified';
+import ConfirmationModal from '@/components/ConfirmationModal/ConfirmationModal';
 // import express from 'express';
 // import phone from 'phone';
 // import Twilio from './Twilio';
@@ -26,7 +27,6 @@ export default function Register() {
   /* -------------------------------------------------------------------------- */
   /*                                    커스텀훅                                    */
   /* -------------------------------------------------------------------------- */
-
   const {
     formData,
     isValidatedList,
@@ -40,6 +40,9 @@ export default function Register() {
 
   const {
     handleEmailVerification,
+    emailVerificationModalMesseage,
+    isEmailVericationModalOpened,
+    setIsEmailVericationModalOpened,
     isVerificationButtonDisabled,
     isEmailInputFieldReadOnly,
   } = useVerified(formData.email, isValidatedList.email, isEmailUnique);
@@ -54,15 +57,21 @@ export default function Register() {
     handleAgreeAll,
   } = useCheckbox();
 
-  const { setIsEnterPressed, isRegisterButtonDisabled, handleSubmit } =
-    useSubmit(
-      formData,
-      isAllFilled,
-      isAllValidated,
-      isEmailUnique,
-      isVerificationButtonDisabled,
-      isRequiredChecked
-    );
+  const {
+    submitModalMesseage,
+    isSubmitModalOpened,
+    setIsSubmitModalOpened,
+    setIsEnterPressed,
+    isRegisterButtonDisabled,
+    handleSubmit,
+  } = useSubmit(
+    formData,
+    isAllFilled,
+    isAllValidated,
+    isEmailUnique,
+    isVerificationButtonDisabled,
+    isRequiredChecked
+  );
 
   /* -------------------------------------------------------------------------- */
   /*                                     마크업                                    */
@@ -84,8 +93,7 @@ export default function Register() {
             onChange={debounce(handleInputChange)}
             type="text"
             placeholder="김슝 / Shoong Kim"
-            customClassNames="h-9 mt-1"
-            bgClassName="bg-gray-100"
+            customClassNames="bg-gray-100 h-9 mt-1"
             isLabeled
             label="이름"
             onKeyDown={(e) => {
@@ -115,8 +123,7 @@ export default function Register() {
             onChange={debounce(handleInputChange)}
             type="text"
             placeholder="shoong@gmail.com"
-            customClassNames="h-9 mt-1"
-            bgClassName="bg-gray-100"
+            customClassNames="bg-gray-100 h-9 mt-1"
             isLabeled
             label="이메일"
             readOnly={isEmailInputFieldReadOnly}
@@ -146,7 +153,7 @@ export default function Register() {
           <Button
             type="button"
             isSmall
-            customClassNames="self-end mt-2"
+            customClassNames="self-end mt-2 focus-visible:outline outline-2 outline-offset-2 outline-black"
             onClick={handleEmailVerification}
             isDisabled={isVerificationButtonDisabled}
           >
@@ -162,9 +169,8 @@ export default function Register() {
             defaultValue={formData.pwd}
             onChange={debounce(handleInputChange)}
             type="password"
-            customClassNames="h-9 mt-1"
+            customClassNames="bg-gray-100 h-9 mt-1"
             placeholder="비밀번호 입력"
-            bgClassName="bg-gray-100"
             isLabeled
             label="비밀번호"
             onKeyDown={(e) => {
@@ -193,8 +199,7 @@ export default function Register() {
             onChange={debounce(handleInputChange)}
             type="password"
             placeholder="비밀번호 재확인"
-            customClassNames="h-9 mt-2"
-            bgClassName="bg-gray-100"
+            customClassNames="bg-gray-100 h-9 mt-2"
             onKeyDown={(e) => {
               if (e.key === 'Enter') setIsEnterPressed(true);
             }} //엔터키로 submit되는 거 막기 위해 isEnterPressed로 관리
@@ -223,8 +228,7 @@ export default function Register() {
             onChange={handleInputChange}
             type="text"
             placeholder="01012345678"
-            customClassNames="h-9 mt-1"
-            bgClassName="bg-gray-100"
+            customClassNames="bg-gray-100 h-9 mt-1"
             isLabeled
             label="휴대폰 번호"
             maxLength="11"
@@ -308,9 +312,7 @@ export default function Register() {
           <Button
             type="button"
             onClick={handleAgreeAll}
-            bgClassName={agreeAllButtonStyle.bg}
-            textColorClassName={agreeAllButtonStyle.text}
-            customClassNames="mt-1"
+            customClassNames={`${agreeAllButtonStyle.bg} ${agreeAllButtonStyle.text} mt-1 focus-visible:outline outline-2 outline-offset-2 outline-black`}
           >
             네, 모두 동의합니다.
           </Button>
@@ -332,6 +334,22 @@ export default function Register() {
           가입하기
         </Button>
       </form>
+      <ConfirmationModal
+        isOpen={isEmailVericationModalOpened}
+        onConfirm={() => {
+          setIsEmailVericationModalOpened(!isEmailVericationModalOpened);
+        }}
+        message={emailVerificationModalMesseage}
+        showCancelButton={false}
+      />
+      <ConfirmationModal
+        isOpen={isSubmitModalOpened}
+        onConfirm={() => {
+          setIsSubmitModalOpened(!isSubmitModalOpened);
+        }}
+        message={submitModalMesseage}
+        showCancelButton={false}
+      />
     </div>
   );
 }
