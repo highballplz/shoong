@@ -330,7 +330,11 @@ export default function Register() {
             ))}
           </div>
         </div>
-        <Button type="submit" isDisabled={isRegisterButtonDisabled}>
+        <Button
+          type="submit"
+          isDisabled={isRegisterButtonDisabled}
+          customClassNames="focus-visible:outline outline-2 outline-offset-2 outline-black"
+        >
           가입하기
         </Button>
       </form>
