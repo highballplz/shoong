@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react';
 import pb from '@/api/pocketbase';
 import { useNavigate } from 'react-router-dom';
 
+const GREETING_MESSEAGE = `\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0환영합니다!\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0`;
+const PLEASE_VERIFY_MESSAGE = '이메일 인증을 진행해주세요';
+const NOT_VERIFIED_MESSAGE = '이메일이 인증되지 않았습니다';
+const REQUEST_FAILED_MESSAGE = `\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0통신 에러입니다.\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0`;
+
 export default function useSubmit(
   formData,
   isAllFilled,
@@ -67,7 +72,7 @@ export default function useSubmit(
     };
 
     if (!isVerificationButtonDisabled) {
-      setSubmitModalMesseage('이메일 인증을 진행해주세요');
+      setSubmitModalMesseage(PLEASE_VERIFY_MESSAGE);
       setIsSubmitModalOpened(true);
       return;
     }
@@ -79,20 +84,26 @@ export default function useSubmit(
 
       if (user.verified) {
         await pb.collection('users').update(user.id, data);
-        setSubmitModalMesseage('환영합니다!');
+        setSubmitModalMesseage(GREETING_MESSEAGE);
         setIsSubmitModalOpened(true);
-        navigate('/Login');
       } else {
-        setSubmitModalMesseage('이메일이 인증되지 않았습니다');
+        setSubmitModalMesseage(NOT_VERIFIED_MESSAGE);
         setIsSubmitModalOpened(true);
       }
     } catch (error) {
-      setSubmitModalMesseage(
-        `\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0통신 에러입니다.\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0`
-      );
+      setSubmitModalMesseage(REQUEST_FAILED_MESSAGE);
       setIsSubmitModalOpened(true);
     }
   };
+
+  useEffect(() => {
+    if (
+      isSubmitModalOpened === false &&
+      submitModalMesseage === GREETING_MESSEAGE
+    ) {
+      navigate('/Login');
+    }
+  });
 
   return {
     submitModalMesseage,

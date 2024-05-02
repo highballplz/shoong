@@ -5,6 +5,10 @@ import { useState } from 'react';
 
 import pb from '@/api/pocketbase';
 
+const REQUEST_FAILED_MESSAGE = `\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0통신 에러입니다.\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0`;
+const WRONG_EMAIL_MESSAGE = '이메일을 확인해주세요';
+const CHECK_MAILBOX_MESSAGE = '인증메일이 보내졌습니다. 메일함을 확인해주세요.';
+
 export default function useVerified(email, isEmailValidated, isEmailUnique) {
   /* -------------------------------------------------------------------------- */
   /*         '인증하기' 버튼 누르면 버튼 disable 시키고 Input 필드 readonly 만들기         */
@@ -38,9 +42,7 @@ export default function useVerified(email, isEmailValidated, isEmailUnique) {
     try {
       await pb.collection('users').create(data);
     } catch (error) {
-      setEmailVerificationModalMesseage(
-        `\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0통신 에러입니다.\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0`
-      );
+      setEmailVerificationModalMesseage(REQUEST_FAILED_MESSAGE);
       setIsEmailVericationModalOpened(true);
     }
   };
@@ -53,15 +55,11 @@ export default function useVerified(email, isEmailValidated, isEmailUnique) {
     const response = await pb.collection('users').requestVerification(email);
     try {
       if (response) {
-        setEmailVerificationModalMesseage(
-          '인증메일이 보내졌습니다. 메일함을 확인해주세요.'
-        );
+        setEmailVerificationModalMesseage(CHECK_MAILBOX_MESSAGE);
         setIsEmailVericationModalOpened(true); //모달창 열여주기 (주의할 점 : requestVerification 함수가 setTimeout에 들어가있기 때문에 handleEmailVerification 바로 안에 setIsEmailVericationModalOpened을 해버리면 requestVerification 되기도 전에 모달창이 먼저 열려버림)
       }
     } catch (error) {
-      setEmailVerificationModalMesseage(
-        `\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0통신 에러입니다.\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0`
-      );
+      setEmailVerificationModalMesseage(REQUEST_FAILED_MESSAGE);
       setIsEmailVericationModalOpened(true); //모달창 열여주기 (주의할 점 : requestVerification 함수가 setTimeout에 들어가있기 때문에 handleEmailVerification 바로 안에 setIsEmailVericationModalOpened을 해버리면 requestVerification 되기도 전에 모달창이 먼저 열려버림)
     }
   };
@@ -83,7 +81,7 @@ export default function useVerified(email, isEmailValidated, isEmailUnique) {
         requestVerification(email);
       }, 900);
     } else {
-      setEmailVerificationModalMesseage('이메일을 확인해주세요');
+      setEmailVerificationModalMesseage(WRONG_EMAIL_MESSAGE);
       setIsEmailVericationModalOpened(true); //모달창 열여주기
     }
   };
