@@ -10,6 +10,7 @@ export default function Input({
   isLabeled = false,
   label,
   mt = 0,
+  tabIndex,
   ...restProps
 }) {
   const defaultClassNames = `h-44pxr w-265pxr rounded-[0.625rem] pl-20pxr text-sm font-medium text-contentPrimary placeholder-contentTertiary outline-none focus:outline-primary`;
@@ -33,6 +34,7 @@ export default function Input({
         type={type}
         placeholder={placeholder}
         className={classNames}
+        tabIndex={tabIndex}
         {...restProps}
       />
     </div>

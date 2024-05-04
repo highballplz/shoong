@@ -3,6 +3,7 @@ export default function TermsCheckbox({
   checkedList,
   onChange,
   children,
+  tabIndex,
 }) {
   const checked = checkedList.includes(name);
 
@@ -21,6 +22,7 @@ export default function TermsCheckbox({
         onChange={onChange}
         type="checkbox"
         className="absolute right-0 h-3 w-3 appearance-none"
+        tabIndex={tabIndex}
       />
       <span className="h-3 w-3" style={checkboxStyle}></span>
     </label>

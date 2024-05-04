@@ -8,6 +8,7 @@ export default function Button({
   customClassNames = '',
   children,
   onClick,
+  tabIndex,
   ...restProps
 }) {
   let width, height, fontWeight;
@@ -32,6 +33,7 @@ export default function Button({
       className={classNames}
       onClick={onClick}
       disabled={isDisabled}
+      tabIndex={tabIndex}
       {...restProps}
     >
       {children}
